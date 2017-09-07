@@ -15,9 +15,10 @@ def run_pla(data):
         has_wrong = False
         for datum in data:
             if sign(np.dot(hypo, datum[0])) != sign(datum[1]):
-                draw_data(USER_DATA, hypo)
+                if len(datum[0]) == 2:
+                    draw_data(USER_DATA, hypo)
                 has_wrong = True
-                hypo = hypo + sign(datum[1]) * datum[0]
+                hypo = hypo + sign(datum[1]) * np.array(datum[0])
 
     return hypo
 
@@ -35,24 +36,25 @@ def draw_data(data, line = []):
     line_min = -line_a*min_x1/line_b
     line_max = -line_a*max_x1/line_b
 
-    plt.plot([min_x1, max_x1],[line_min, line_max])
+    plt.plot([min_x1, max_x1], [line_min, line_max])
     plt.axis([min_x1, max_x1, min_x2, max_x2])
     plt.scatter(data_x1[data_y > 0], data_x2[data_y > 0], c='r', marker='o')
     plt.scatter(data_x1[data_y < 0], data_x2[data_y < 0], c='b', marker='^')
     plt.show()
 
 USER_DATA = [
-        [[-3, 3], 1],
-        [[1, 2], 1],
-        [[-3, -4], -1],
-        [[3, 2], 1],
-        [[5, 3], 1],
-        [[2, -4], -1],
-        [[1, 8], 1],
-        [[-5, -3], -1],
-        [[7, 2], 1],
-        [[-1, -5], -1]]
+        [[-3, 3, 3], 1],
+        [[1, 2, 1], 1],
+        [[-3, -4, -5], -1],
+        [[3, 2, 7], 1],
+        [[5, 3, 8], 1],
+        [[2, -4, -2], -1],
+        [[1, 8, 2], 1],
+        [[-5, -3, -1], -1],
+        [[7, 2, 5], 1],
+        [[-1, -5, -3], -1]]
         
 hypo_g = run_pla(USER_DATA)
 print hypo_g
-draw_data(USER_DATA, hypo_g)
+if len(hypo_g) == 2:
+    draw_data(USER_DATA, hypo_g)
